@@ -19,12 +19,13 @@ df = df.drop(['Unnamed: 0'], axis = 1)
 X = df.drop(['Blocked'], axis = 1)
 y = df['Blocked']
 #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 5)
 model = LogisticRegression(random_state=0, multi_class='multinomial', 
-                           solver='newton-cg').fit(X, y)
+                           solver='newton-cg').fit(X_train, y_train)
 #model.fit(X, y)
 
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
-scores = cross_val_score(model, X, y, scoring = 'accuracy', cv = cv, n_jobs=-1)
+scores = cross_val_score(model, X.test, y.test, scoring = 'accuracy', cv = cv, n_jobs=-1)
 
 app.layout = html.Div(children=[
     html.H1(children='Punt Block analyzer',
